@@ -32,6 +32,14 @@ const Navigation = () => {
                         <button id="playlists-link"><NavLink to="/playlists" className="inactive-link" activeClassName="active-playlists-link">Playlists</NavLink></button>
                         {playlistsArray.map(playlist => <button key={playlist.id}  className="playlist-link"> <NavLink to={`/playlists/${playlist.id}`} className="inactive-link"  activeClassName="active-playlists-link">{playlist.title}</NavLink></button>)}
                     </ul> }
+                    <div className="about-me">
+                            <a href="https://github.com/EltionBehrami" target="_blank">
+                            <div id="git"></div>
+                            </a>
+                        <a href="https://www.linkedin.com/in/eltion-behrami-5b9367271/" target="_blank">
+                            <div className="linked-in-container"></div>
+                        </a>
+                    </div>
             </div>
         </>
     )

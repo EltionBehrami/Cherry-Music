@@ -108,7 +108,6 @@ export const addToPlaylist = (playlistId, songId) => async dispatch => {
     
     if (response.ok){
         const data = await response.json(); 
-        console.log("Data from addToPlaylist:", data); // Log the data
         dispatch(addSongToPlaylist(data))
         return data 
     }
@@ -160,7 +159,6 @@ const playlistReducer = (state = {}, action) => {
             delete newState[action.playlistId];
             return newState;
         case ADD_SONG_TO_PLAYLIST: 
-        debugger
         const { playlistId, songId } = action.payload;
         const playlistToUpdate = newState[playlistId];
         if (playlistToUpdate) {

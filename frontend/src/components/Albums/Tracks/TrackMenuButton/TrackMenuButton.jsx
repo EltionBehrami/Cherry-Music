@@ -38,7 +38,6 @@ const TrackMenuButton = ({ track, playlist }) => {
 
     const removeFromPlaylist = (track) => {
         const playlistSongId = getPlaylistSongId(track)
-        debugger
         dispatch(deletePlaylistSong(playlistSongId, track.id, playlist.id))
     }
 
