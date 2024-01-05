@@ -12,7 +12,7 @@ Rails.application.routes.draw do
     resources :artists, only: [:index, :show]
     resources :songs, only: [:index, :show]
     resources :playlists
-    resources :playlist_songs, only: [:index, :create, :destroy]
+    resources :playlist_songs, only: [:index, :create, :destroy, :show]
   end 
 
   get '*path', to: "static_pages#frontend_index"

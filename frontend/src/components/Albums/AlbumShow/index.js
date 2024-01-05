@@ -11,13 +11,10 @@ const AlbumShow = () => {
     const album = useSelector(getAlbum(albumId))
     const songs = useSelector(getAlbumSongs(albumId))
     const dispatch = useDispatch();  
-    const sessionUser = useSelector(state => state.session.user)
 
-    
     useEffect(() => {
         dispatch(fetchAlbum(albumId))
     }, [dispatch, albumId])
-    
     
     
     return (

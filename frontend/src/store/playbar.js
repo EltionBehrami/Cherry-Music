@@ -4,6 +4,7 @@ export const PAUSE = 'PAUSE'
 export const SET_CURRENT_SONG = "SET_CURRENT_SONG"
 export const SET_QUEUE = "SET_QUEUE"
 export const SET_SONG_QUEUE = "SET_SONG_QUEUE"
+export const SET_PLAYLIST_QUEUE = "SET_PLAYLIST_QUEUE"
 
 export const playSong = () => {
     return {
@@ -27,6 +28,13 @@ export const setCurrentSong = song => {
 export const setQueue= album => {
     return {
         type: SET_QUEUE, 
+        album
+    }
+}
+
+export const setPlaylistQueue= album => {
+    return {
+        type: SET_PLAYLIST_QUEUE, 
         album
     }
 }
@@ -57,6 +65,8 @@ const playbarReducer = (state = initialState, action) => {
             return {...newState, isPlaying: true, currentSong: action.song }
         case SET_QUEUE:
             return {...newState, queue: action.album.albumSongs }    
+        case SET_PLAYLIST_QUEUE:
+            return {...newState, queue: action.album.playlistSongs }    
         case SET_SONG_QUEUE: 
             return {...newState, queue: [action.songId]}    
         default: 

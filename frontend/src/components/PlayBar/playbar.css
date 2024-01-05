@@ -70,6 +70,7 @@
     display: flex;
     justify-content: center;
     align-items: center;
+    margin-left: 100px;
 }
 
 #volume {
@@ -94,13 +95,11 @@
     background-color: #fff;
     border-radius: 50%;
     border: 1px solid #ccc;
-    transform: translateY(-35%) translateX(100%);
+    transform: translateY(-35%);
 }
 
 
 #volume::-webkit-slider-runnable-track {
     height: 3px;
-    background: #ccc;
-    border-radius: 100%;
-
+    background: #ccc
 }

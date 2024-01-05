@@ -8,6 +8,7 @@ class User < ApplicationRecord
     validates :password, length: {minimum: 6}, allow_nil: true
 
     has_many :playlists, dependent: :destroy 
+    has_many :playlist_songs, through: :playlists, source: :songs
     
 
     def self.find_by_credentials(email, password) 

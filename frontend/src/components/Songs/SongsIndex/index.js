@@ -23,7 +23,7 @@ const SongsIndex = () => {
         if (currentUser){
             dispatch(fetchSongs());
         }
-    }, [currentUser, dispatch])
+    }, [dispatch])
 
     
 
@@ -32,10 +32,9 @@ const SongsIndex = () => {
             <div className="songs-index-header">Songs</div>
             <ul className="songs-index-container ">
                 {Object.values(songs).map((song, index) => 
-                <li onClick={() => handleItemClick(song)} className={index % 2 === 0 ? 'even' : 'odd'}>
+                <li key={song.id} onClick={() => handleItemClick(song)} className={index % 2 === 0 ? 'even' : 'odd'}>
                     <TracksIndexItem 
                         track={song}   
-                        key={song.id} 
                         isActive={song.id === activeItemId}   
                         />
                 </li>)}

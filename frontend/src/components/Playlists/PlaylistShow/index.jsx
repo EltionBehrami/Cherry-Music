@@ -1,36 +1,31 @@
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useHistory, useParams } from "react-router-dom/cjs/react-router-dom.min";
-import { deletePlaylist, fetchPlaylist, getPlaylist, updatePlaylist } from "../../../store/playlists";
+import { deletePlaylist, fetchPlaylist, getPlaylist, getPlaylistSongs, updatePlaylist } from "../../../store/playlists";
 import { openModal, setPlaylistId } from "../../../store/modal";
 import PlaylistMenuButton from "./PlaylistMenuButton";
-import { fetchPlaylistSongs, getPlaylistSongs } from "../../../store/playlistSongs";
+import { fetchPlaylistSongs,} from "../../../store/playlistSongs";
 import TracksIndex from "../../Albums/Tracks/TracksIndex";
 import { fetchSongs } from "../../../store/songs";
 import "./PlaylistShow.css"
 
 
-
-
 const PlaylistShow = () => {
-
+    const dispatch = useDispatch();  
+    const history = useHistory();
     const { playlistId } = useParams(); 
     const playlist = useSelector(getPlaylist(playlistId))
-    const dispatch = useDispatch();  
-    const currentUser = useSelector(state => state.session.user)
-    const history = useHistory();
     const songs = useSelector(getPlaylistSongs(playlistId))
-
+    const currentUser = useSelector(state => state.session.user)
+    
 
     useEffect(() => {
-            dispatch(fetchPlaylist(playlistId))
-            dispatch(fetchPlaylistSongs(playlistId))
+        dispatch(fetchPlaylist(playlistId))
+        dispatch(fetchSongs())
     }, [dispatch, playlistId])
-
+    
     const handleClick = () => {
         dispatch(openModal("edit_playlist"))
-        dispatch(setPlaylistId(playlist))
-        dispatch(fetchSongs());
     }
 
     const handleDeletePlaylist = () => {
@@ -51,15 +46,15 @@ const PlaylistShow = () => {
                             <div className="album-genre" > {playlist?.description} </div>
                         </div>
                         <div id="playlist-play"> 
-                            <button onClick={handleClick} id="playlist-play-button" > Play </button>
+                            <button id="playlist-play-button" > Edit  </button>
                             <PlaylistMenuButton handleDeletePlaylist={handleDeletePlaylist} />
                         </div>
                     </div>
                 </div>
                 <div className="playlist-songs-container">
                 {playlist && (
-                        <TracksIndex album={playlist} songs={songs}/>
-                    )}
+                    <TracksIndex playlist={playlist} songs={songs}/>
+                )}
                 </div>
             </div>
         </>

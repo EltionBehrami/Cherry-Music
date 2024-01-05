@@ -21,7 +21,7 @@ const AlbumsIndex = () => {
         <>  
                 <div className="index-header">Albums</div>
                 <div className="index-container">
-                    {albumsArray.map(album => <Link id="album-show-link" to={`/albums/${album.id}`}> <AlbumIndexItem  album={album}/></Link>)}
+                    {albumsArray.map(album => <Link key={album.id} id="album-show-link" to={`/albums/${album.id}`}> <AlbumIndexItem  album={album}/></Link>)}
                 </div>
         </>
     )

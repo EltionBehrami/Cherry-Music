@@ -6,6 +6,7 @@ import Controls from "./Controls";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { getSong } from "../../store/songs";
 import "./playbar.css"
+import Volume from "./Volume";
 
 const PlayBar = () => {
     const dispatch = useDispatch();
@@ -16,7 +17,7 @@ const PlayBar = () => {
     const [progress, setProgress] = useState(0)
     const [duration, setDuration] = useState(0)
     const isPlaying = useSelector(state => state.playbar.isPlaying);
-    const [volume, setVolume] = useState(.5);
+    const [volume, setVolume] = useState(0);
     
 
     const queue = useSelector(state => state.playbar.queue);
@@ -26,7 +27,6 @@ const PlayBar = () => {
     const currentSong = useSelector(getSong(currentSongId));
 
     
-
     const onLoadedMetadata = () => {
     const seconds = audioRef.current.duration;
     setDuration(seconds);
@@ -62,17 +62,48 @@ const PlayBar = () => {
         }
     };
 
+    // useEffect(() => {
+    //     if (audioRef.current) {
+    //         if (isPlaying) {
+    //         audioRef.current.play();
+    //         audioRef.current.volume = .5
+    //         setVolume(.5)
+    //         playAnimationRef.current = requestAnimationFrame(repeat);
+    //         } else {
+    //         audioRef.current.pause();
+    //         cancelAnimationFrame(playAnimationRef.current);
+    //         }
+    //     }
+    // }, [isPlaying, audioRef, repeat]);
+
     useEffect(() => {
-        if (audioRef.current) {
-            if (isPlaying) {
+        const playAudio = () => {
+            if (audioRef.current && audioRef.current.readyState >= 3) {
+            // Ready state 3 means the audio has enough data to start playing
             audioRef.current.play();
-            playAnimationRef.current = requestAnimationFrame(repeat);
-            } else {
-            audioRef.current.pause();
-            cancelAnimationFrame(playAnimationRef.current);
+            }
+        audioRef.current.volume = 0.5;
+        setVolume(0.5);
+        playAnimationRef.current = requestAnimationFrame(repeat);
+        };
+    
+        if (isPlaying) {
+            playAudio();
+        } else {
+            if (audioRef.current) {
+                audioRef.current.pause();
+                cancelAnimationFrame(playAnimationRef.current);
             }
         }
+    
+        return () => {
+          // Cleanup
+            if (audioRef.current) {
+                audioRef.current.removeEventListener('canplay', playAudio);
+            }
+        };
     }, [isPlaying, audioRef, repeat]);
+
 
     let sessionLinks; 
     if (sessionUser) {
@@ -82,7 +113,6 @@ const PlayBar = () => {
             <>
                 <button id="login-button" onClick={() => dispatch(openModal('login'))}>Sign In</button>
                 <button id="signup-button"onClick={() => dispatch(openModal('signup'))}>Sign Up</button>
-
             </>
         );
     } 
@@ -92,9 +122,7 @@ const PlayBar = () => {
                 <audio ref={audioRef} src={currentSong?.songUrl} autoPlay={isPlaying} onLoadedMetadata={onLoadedMetadata}></audio>
                 <Controls audioRef={audioRef} currentSongIndex={currentSongIndex} setCurrentSongIndex={setCurrentSongIndex} queue={queue} currentSong={songId} progressBarRef={progressBarRef} duration={duration} setProgress={setProgress}/>
                 <SongDisplay progressBarRef={progressBarRef} audioRef={audioRef} progress={progress} setProgress={setProgress} duration={duration} setDuration={setDuration} currentSong={currentSong} currentSongId={currentSongId}/>
-                <div className="volume-container">
-                    <input id="volume" type="range" min="0" max="1" step="0.01" value={volume} onChange={handleVolume} setDuration={setDuration}></input>
-                </div>
+                <Volume volume={volume} handleVolume={handleVolume}/>
                 <li className="session-links">
                 {sessionLinks}
                 </li>    

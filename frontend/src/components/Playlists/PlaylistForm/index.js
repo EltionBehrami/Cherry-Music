@@ -21,9 +21,6 @@ const PlaylistForm = ( {playlistId} ) => {
         }
     }, [dispatch, playlistId]);
     
-    debugger
-
-
     const changeTitle = (e) => {
         setTitle(e.target.value)
     }

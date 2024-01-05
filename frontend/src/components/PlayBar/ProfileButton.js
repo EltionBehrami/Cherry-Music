@@ -13,9 +13,11 @@ const ProfileButton = () => {
     const [showMenu, setShowMenu] = useState(false)
     const history = useHistory();
 
-    const openMenu = () => {
-        if (showMenu) return;
-            setShowMenu(true)
+    const openMenu = (e) => {
+        e.stopPropagation(); 
+        if (!showMenu) {
+            setShowMenu(true);
+        }
     }
 
     

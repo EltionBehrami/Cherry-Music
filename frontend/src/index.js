@@ -1,6 +1,6 @@
-
 import React from 'react';
 import ReactDOM from 'react-dom';
+import { createRoot } from 'react-dom/client';
 import { Provider } from 'react-redux';
 import { BrowserRouter } from 'react-router-dom';
 import './index.css';
@@ -21,6 +21,7 @@ if (process.env.NODE_ENV !== 'production') {
   window.playlistActions = playlistActions 
 }
 
+const root = createRoot(document.getElementById('root'));
 
 function Root() {
   return (
@@ -33,11 +34,10 @@ function Root() {
 }
 
 const renderApplication = () => {
-  ReactDOM.render(
+  root.render(
     <React.StrictMode>
       <Root />
-    </React.StrictMode>,
-    document.getElementById('root')
+    </React.StrictMode>
   );
 }
 
