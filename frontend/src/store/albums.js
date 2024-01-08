@@ -26,18 +26,20 @@ export const getAlbum = albumId => state => {
 }
 
 
-export const getAlbumSongs = albumId => state => {
-    const songs = [];
-    Object.values(state.songs).forEach(song => {
-        if (song.albumId === parseInt(albumId)){
-            songs.push(song)
+export const getAlbumSongs = albumId => {
+    const cache = {};
+
+    return state => {
+        const songs = Object.values(state.songs);
+
+        if (!cache[albumId]) {
+            const filteredSongs = songs.filter(song => song.albumId === parseInt(albumId));
+            cache[albumId] = filteredSongs;
         }
-    })
-    return songs;
-}
 
-
-
+        return cache[albumId];
+    };
+};
 
 
 export const fetchAlbums = () => async dispatch => {

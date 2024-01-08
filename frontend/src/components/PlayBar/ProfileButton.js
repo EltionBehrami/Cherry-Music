@@ -17,6 +17,8 @@ const ProfileButton = () => {
         e.stopPropagation(); 
         if (!showMenu) {
             setShowMenu(true);
+        } else {
+            setShowMenu(false)
         }
     }
 

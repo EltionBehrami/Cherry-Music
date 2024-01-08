@@ -57,11 +57,20 @@ export const getPlaylist = playlistId => state => {
     return state?.playlists ? state.playlists[playlistId] : null;
 } 
 
-export const getPlaylistSongs = (playlistId) => (state) => {
-    const playlistSongs = state.playlists[(playlistId)]?.playlistSongs || [];
-    const songs = Object.values(state.songs)
-        .filter(song => playlistSongs.includes(song.id)); 
-    return songs;
+export const getPlaylistSongs = (playlistId) => {
+    const cache = {};
+
+    return (state) => {
+        if (!cache[playlistId]) {
+            const playlistSongs = state.playlists[playlistId]?.playlistSongs || [];
+            const songs = Object.values(state.songs)
+                .filter((song) => playlistSongs.includes(song.id));
+
+            cache[playlistId] = songs;
+        }
+
+        return cache[playlistId];
+    };
 };
 
 
@@ -165,7 +174,6 @@ const playlistReducer = (state = {}, action) => {
             const updatedPlaylist = {
                 ...playlistToUpdate,
                 playlistSongs: [...playlistToUpdate.playlistSongs, songId],
-                // playlistSongIds: [...playlistToUpdate.playlistSongIds, action.payload.id]
             };
             return {
                 ...newState,

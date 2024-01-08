@@ -6,6 +6,7 @@ const TracksIndexItem = ({ track, isActive, handleItemClick, album, playlist}) =
 
 const [duration, setDuration] = useState(null);
 
+
     useEffect(() => {
         function getMP3Duration(songUrl, callback) {
             const audio = new Audio();
@@ -40,7 +41,7 @@ const [duration, setDuration] = useState(null);
                 <span id="track-title">{track.title}</span>
             </div>
             <div className="right-track-container">
-                <span onClick={() => handleItemClick(track)} id="track-duration">{duration !== null ? formatDuration(duration) : ''}</span>
+                <span onClick={() => handleItemClick(track)} id="track-duration">{duration !== null ? formatDuration(duration) : 'Loading...'}</span>
                 <TrackMenuButton track={track} playlist={playlist}/>
             </div>
         </div>

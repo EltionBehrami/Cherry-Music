@@ -15,6 +15,7 @@ const PlayBar = () => {
     const progressBarRef = useRef();
     const playAnimationRef = useRef();
     const [progress, setProgress] = useState(0)
+    const [lastKnownProgress, setLastKnownProgress] = useState(0);
     const [duration, setDuration] = useState(0)
     const isPlaying = useSelector(state => state.playbar.isPlaying);
     const [volume, setVolume] = useState(0);
@@ -25,6 +26,7 @@ const PlayBar = () => {
     const [currentSongIndex, setCurrentSongIndex] = useState(0);
     const currentSongId = queue[currentSongIndex];
     const currentSong = useSelector(getSong(currentSongId));
+
 
     
     const onLoadedMetadata = () => {
@@ -62,46 +64,29 @@ const PlayBar = () => {
         }
     };
 
-    // useEffect(() => {
-    //     if (audioRef.current) {
-    //         if (isPlaying) {
-    //         audioRef.current.play();
-    //         audioRef.current.volume = .5
-    //         setVolume(.5)
-    //         playAnimationRef.current = requestAnimationFrame(repeat);
-    //         } else {
-    //         audioRef.current.pause();
-    //         cancelAnimationFrame(playAnimationRef.current);
-    //         }
-    //     }
-    // }, [isPlaying, audioRef, repeat]);
-
     useEffect(() => {
-        const playAudio = () => {
-            if (audioRef.current && audioRef.current.readyState >= 3) {
-            // Ready state 3 means the audio has enough data to start playing
-            audioRef.current.play();
+        const handlePlay = () => {
+            const playPromise = audioRef.current.play();
+    
+            if (playPromise !== undefined) {
+                playPromise
+                    .then(() => {
+                        // Autoplay started successfully
+                        setVolume(audioRef.current.volume);
+                        playAnimationRef.current = requestAnimationFrame(repeat);
+                    })
+                    .catch(error => {
+                        // Autoplay was prevented
+                        console.log('Autoplay prevented');
+                    });
             }
-        audioRef.current.volume = 0.5;
-        setVolume(0.5);
-        playAnimationRef.current = requestAnimationFrame(repeat);
         };
     
         if (isPlaying) {
-            playAudio();
+            handlePlay();
         } else {
-            if (audioRef.current) {
-                audioRef.current.pause();
-                cancelAnimationFrame(playAnimationRef.current);
-            }
+            audioRef.current.pause();
         }
-    
-        return () => {
-          // Cleanup
-            if (audioRef.current) {
-                audioRef.current.removeEventListener('canplay', playAudio);
-            }
-        };
     }, [isPlaying, audioRef, repeat]);
 
 
@@ -119,7 +104,7 @@ const PlayBar = () => {
 
     return (
             <div className="playbar">
-                <audio ref={audioRef} src={currentSong?.songUrl} autoPlay={isPlaying} onLoadedMetadata={onLoadedMetadata}></audio>
+                <audio preload="none" ref={audioRef} src={currentSong?.songUrl} autoPlay={isPlaying} onLoadedMetadata={onLoadedMetadata}></audio>
                 <Controls audioRef={audioRef} currentSongIndex={currentSongIndex} setCurrentSongIndex={setCurrentSongIndex} queue={queue} currentSong={songId} progressBarRef={progressBarRef} duration={duration} setProgress={setProgress}/>
                 <SongDisplay progressBarRef={progressBarRef} audioRef={audioRef} progress={progress} setProgress={setProgress} duration={duration} setDuration={setDuration} currentSong={currentSong} currentSongId={currentSongId}/>
                 <Volume volume={volume} handleVolume={handleVolume}/>

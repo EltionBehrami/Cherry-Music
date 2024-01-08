@@ -22,7 +22,7 @@ const Controls = ( { audioRef, currentSongIndex, setCurrentSongIndex, queue, cur
     }
 
     const play = () => {
-            if (currentSong) {
+            if (currentSong ) {
                 audioRef.current.currentTime = audioRef.current.currentTime || 0;
                 dispatch(playSong());
             }
