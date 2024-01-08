@@ -1,12 +1,8 @@
 # Cherry Music
 
-## Brief Explanation
-
 Cherry Music is a clone of Apple Music, providing a seamless music streaming experience. Key features include albums, playlists, a dynamic playbar, and a search functionality.
 
-## Live Site
-
-[Cherry Music - Live Site](https://cherry-music.onrender.com/)
+[Cherry Music](https://cherry-music.onrender.com/)
 
 ## Technologies Used
 
@@ -57,6 +53,34 @@ const pause = () => {
 ### Creating Playlists
 
 Users can personalize their music experience by creating and managing playlists. The implementation includes CRUD operations for playlists, ensuring a tailored and consistent playlist experience across devices.
+
+```javacript
+case ADD_SONG_TO_PLAYLIST: 
+        const { playlistId, songId } = action.payload;
+        const playlistToUpdate = newState[playlistId];
+        if (playlistToUpdate) {
+            const updatedPlaylist = {
+                ...playlistToUpdate,
+                playlistSongs: [...playlistToUpdate.playlistSongs, songId],
+            };
+            return {
+                ...newState,
+                [playlistId]: updatedPlaylist,
+            };
+        }
+        return newState;
+case REMOVE_SONG_FROM_PLAYLIST: 
+        const playlist = {...newState[action.payload.playlistId]}
+
+        playlist.playlistSongs = playlist.playlistSongs.filter((id) => id !== action.payload.songId)
+        playlist.playlistSongIds = playlist.playlistSongIds.filter((id) => id !== action.payload.playlistSongId)
+
+        const updatedState =  {
+            ...newState, [action.payload.playlistId]: playlist,
+        };
+
+        return updatedState
+```
 
 
 ## Conclusion
